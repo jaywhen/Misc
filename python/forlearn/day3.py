@@ -12,8 +12,26 @@ anlist = ['jordan', 23]
 nba_star = [alist, anlist]
 print(nba_star)
 
+## 通用的序列操作: index
+print(alist[0][0], "|", alist[-1])
+
+## 切片: numbers[第一个元素的索引，最后一个元素的索引+1, 步长（可省略，省略为1）]
+## 即，第一个索引在切片内，第二个索引不在切片内
+numbers = [1,2,3,4,5,6]
+print(numbers[0:3], numbers[3:-1])
+print(numbers[:], numbers[-3:], numbers[:3])
+
+## 切片的步长，步长如果为负数，则代表从右往左数
+print(numbers[0:4:2]) # 1,3
+print(numbers[::2],numbers[::-1])
+
+## 序列相加
+print("alist+numbers is: ", alist+numbers)
+
+
 aset = {'foo', 'bar'}
 print(aset)
 
 atuple = (1,2,3,'hello')
 print(atuple)
+
