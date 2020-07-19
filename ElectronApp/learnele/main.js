@@ -7,10 +7,12 @@ function createWindow () {
         webPreferences: {
             nodeIntegration:true
         }
+        
     })
 
     // 为应用加载index.html
-    win.loadFile('index.html')
+    // win.loadFile('index.html')
+    win.loadURL('https://jaywhen.com/')
 
     // 打开开发者工具
     win.webContents.openDevTools()
