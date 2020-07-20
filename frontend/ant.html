@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <html> <!--这居然是一个注释-->
-    <title>
-
-    </title>
-
+<head>
+    <meta charset="UTF-8">
+    <title>hi!</title>
+    <!-- <script>
+        alert("hi, js!")
+        document.write("看不到我~")
+        console.log("这呢")
+    </script> -->
+    <!--
+        引入外部js
+        script标签一旦用于引入外部文件，在内部的代码将不予执行
+    -->
+    <script type="text/javascript" src="js/script.js"></script>
+</head>
     <body>
-
+        <button onclick="alert('你果然点了一下')">click me</button>
+        
     </body>
-
 </html>
