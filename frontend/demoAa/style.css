@@ -1,5 +1,5 @@
 body {
-    max-width: 900px;
+    max-width: 850px;
     margin: 0 auto;
 }
 
@@ -12,10 +12,8 @@ body {
     list-style-type: none;
 }
 .contact-me li {
-    display: inline;
-    text-align: center;
-    margin-left: 18px;
-
+    text-align: left;
+    margin-top: 10px;
 }
 
 h1 {
