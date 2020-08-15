@@ -31,3 +31,17 @@ Ctrl+F5 || Shift+F5
 
 ```
 
+
+
+> 过滤器：
+>
+> - 变量|过滤器
+>
+> - ```
+>   {% filter upper %}
+>   	some text
+>   {% endfilter %}
+>   # 将这段文字转换为大写
+>   ```
+>
+> - 
