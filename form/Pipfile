@@ -1,6 +1,6 @@
 [[source]]
 name = "pypi"
-url = "https://pypi.org/simple"
+url = "https://pypi.doubanio.com/simple/"
 verify_ssl = true
 
 [dev-packages]
@@ -8,6 +8,7 @@ verify_ssl = true
 [packages]
 flask = "*"
 python-dotenv = "*"
+flask-wtf = "*"
 
 [requires]
 python_version = "3.8"

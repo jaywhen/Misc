@@ -6,11 +6,13 @@
             <meta charset="utf-8">
         {% endblock metas %}
 
-        <title>{% block title %}Form - HelloFlask{% endblock %}</title>
+        <title>{% block title %}Form - Flask{% endblock %}</title>
         <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.png') }}">
+        
         {% block styles %}
             <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css' ) }}">
         {% endblock styles %}
+
     {% endblock head %}
 </head>
 <body>
