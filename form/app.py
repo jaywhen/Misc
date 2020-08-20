@@ -4,7 +4,7 @@ from forms import LoginForm, UploadForm
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'secret string')
-app.config['UPLOAD_PATH']
+app.config['UPLOAD_PATH'] = os.path.join(app.root_path, 'uploads')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -35,3 +35,11 @@ def test():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
    form = UploadForm()
+   if form.validate_on_submit():
+      f = form.photo.data
+      filename = random_filename(f.filename)
+      f.save(os.path.join(app.config['UPLOAD_PATH'], filename))
+      flash('Upload success.')
+      session['filenames'] = [filename]
+      return redirect(url_for('show_images'))
+   return render_template('upload.html', form=form)

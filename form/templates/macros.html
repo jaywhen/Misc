@@ -1,4 +1,4 @@
-{% macro from_field(field) %}
+{% macro form_field(field) %}
     {{ field.label }}<br>
     {{ field(**kwargs) }}<br>
     {% if field.errors %}
@@ -6,4 +6,4 @@
             <small class="error">{{ error }}</small><br>
         {% endfor %}
     {% endif %}
-{% endmacor %}
+{% endmacro %}
