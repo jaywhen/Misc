@@ -42,12 +42,15 @@ footer {
 }
 
 .alert {
-  position: relative;
-  padding: 0.75rem 1.25rem;
-  margin-bottom: 1rem;
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
-  color: #004085;
-  background-color: #cce5ff;
-  border-color: #b8daff;
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid #b8daff;
+    border-radius: 0.25rem;
+    color: #004085;
+    background-color: #cce5ff;
+}
+  
+.error {
+    color: red;
 }
