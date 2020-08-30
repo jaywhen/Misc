@@ -18,7 +18,7 @@ def initdb(drop):
     db.create_all()
     click.echo('Initialized database')
     # add some user
-    for i in range(0, 3):
+    for i in range(0, 100):
         user = User(
             username = 'User' + str(i),
             password = 'a' + str(i)
@@ -33,7 +33,7 @@ def initdb(drop):
                 comment = Comment(
                     content = 'This is a test comment' + str(k),
                     image_id = 1 + 2*i + j,
-                    user_id = i + 1
+                    user_id = i + 1,
                 ) 
                 db.session.add(comment)
 
@@ -41,6 +41,32 @@ def initdb(drop):
     click.echo('now added some users')
 
 @app.cli.command()
-def tcli():
-    """ for testing """
-    print('hi')
+def tqur():
+    """ do some test query """
+    user = User.query.get(1)
+    print(user.images)
+
+    image = Image.query.get(1)
+    print(image.user)
+
+@app.cli.command()
+def tupdate():
+    """ do some test update """
+
+    # 直接修改类属性名来实现数据库的update
+    for i in range(50, 100, 2):
+        user = User.query.get(i)
+        user.username = '[VIP]' + user.username
+
+    # 通过.update方法来实现数据库的update
+    User.query.filter_by(id = 51).update({'username':'gimgon'})
+    db.session.commit()
+
+@app.cli.command()
+def tdel():
+    """ do some test delete """
+
+    for i in range(50, 100, 2):
+        comment = Comment.query.get(i+1)
+        db.session.delete(comment)
+    db.session.commit()
