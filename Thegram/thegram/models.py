@@ -21,13 +21,13 @@ class Image(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     url = db.Column(db.String(256)) 
     user_id = db.Column(db.Integer, db.ForeignKey(User.id))
-    created_data = db.Column(db.DateTime)
+    created_date = db.Column(db.DateTime)
     comments = db.relationship('Comment')
 
     def __init__(self, url, user_id):
         self.url = url
         self.user_id = user_id
-        self.created_data = datetime.now()
+        self.created_date = datetime.now()
 
     def __repr__(self):
         return '<Image %d %s>' %(self.id, self.url)
