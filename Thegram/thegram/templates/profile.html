@@ -22,11 +22,29 @@
         </header>
         <div class="list-mod">
             <div class="list clearfix js-image-list">
-                
+                {% for image in user.images %}
+                    <a class="item" href="/image/{{ image.id }}">
+                        <div class="img-box">
+                            <img src="{{ image.url }}">
+                        </div>
+                        <div class="img-mask"></div>
+                        <div class="interaction-wrap">
+                            <div class="interaction-item"><i class="icon-comment"></i>{{ image.comments|length }}</div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+            <div class="more-content js-load-more">
+                <a class="_oidfu" href="javascript:void(0);">more</a>
             </div>
         </div>
     </article>
-
 </div>
-
 {% endblock %}
+{% block js %}
+<script type="text/javascript">
+    //window.uid = {{user.id}}; 
+</script>
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/profile.js"></script>
+{% endblock%}
