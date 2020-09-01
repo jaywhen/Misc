@@ -29,9 +29,9 @@ def initdb(drop):
             image = Image(get_image_url(), i+1)
             db.session.add(image)
 
-            for k in range(0, 2):
+            for k in range(0, 3):
                 comment = Comment(
-                    content = 'This is a test comment' + str(k),
+                    content = '🧡💛💚💙💜🤎🖤' + str(k),
                     image_id = 1 + 2*i + j,
                     user_id = i + 1,
                 ) 

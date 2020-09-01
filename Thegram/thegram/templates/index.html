@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}homepage{% endblock %}
-{% block css %}static/styles/pages/index.css{% endblock %}
+{% block css %}{{ url_for('static', filename = 'styles/pages/index.css') }}{% endblock %}
 {% block content %}
 <div class="page-main clearfix">
     {% for image in images %}
@@ -38,6 +38,7 @@
                     </a>
                 </li>
                 {% for comment in image.comments %}
+                {% if loop.index > 2 %} {% break %} {% endif %}
                 <li>
                     <a title="{{ comment.user.username }}" href="profile/{{ comment.user.id }}">{{ comment.user.username }}</a>
                     <span>
