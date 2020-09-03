@@ -22,3 +22,7 @@ def profile(user_id):
    if user == None:
       return redirect('/')
    return render_template('profile.html', user = user)
+
+@app.route('/login')
+def login():
+   return render_template('login.html')
