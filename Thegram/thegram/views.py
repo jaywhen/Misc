@@ -1,7 +1,16 @@
 from thegram import app
 
-from flask import render_template, url_for, redirect
+from flask import render_template, url_for, redirect, request, flash
 from thegram.models import User, Image
+import random, hashlib
+
+
+
+def redirect_with_msg(target, msg, category):
+   if msg != None:
+      flash(msg, category = category)
+   return redirect(target)
+
 
 @app.route('/')
 def index():
@@ -26,3 +35,28 @@ def profile(user_id):
 @app.route('/login')
 def login():
    return render_template('login.html')
+
+@app.route('/reg')
+def reg():
+   username = request.values.get('username').strip()
+   password = request.values.get('password').strip()
+
+   user = User.query.filter_by(username = username).first()
+   if username == '' or password == '':
+      redirect_with_msg(url_for('login'), '用户名或密码为空！', 'login')
+
+   if user != None:
+      redirect_with_msg(url_for('login'), '用户名已存在👌', 'login')
+
+   # 将新用户入表
+
+   
+
+
+@app.route('/legal/terms')
+def legal_terms():
+   pass
+
+@app.route('/legal/privacy')
+def legal_privacy():
+   pass
