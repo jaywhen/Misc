@@ -50,7 +50,9 @@ class Comment(db.Model):
     def __repr__(self):
         return '<Comment %d %s>' %(self.id, self.content)
 
-
+# 修改建表函数
+# 尝试faker
+# fake数据不要超过20个（user）
 
 
 
