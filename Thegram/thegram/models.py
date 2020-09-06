@@ -5,8 +5,8 @@ import random
 class User(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     username = db.Column(db.String(20), unique = True)
-    password = db.Column(db.String(16))
-    salt = db.Column(db.String(16))
+    password = db.Column(db.String(32))
+    salt = db.Column(db.String(32))
     head_url = db.Column(db.String(256))
     images = db.relationship('Image', backref = 'user', lazy = 'dynamic')
 

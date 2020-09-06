@@ -1,7 +1,7 @@
 from thegram import app
 
-from flask import render_template, url_for, redirect, request, flash
-from thegram.models import User, Image
+from flask import render_template, url_for, redirect, request, flash, get_flashed_messages
+from thegram.models import User, Image, db
 import random, hashlib
 
 
@@ -32,23 +32,58 @@ def profile(user_id):
       return redirect('/')
    return render_template('profile.html', user = user)
 
-@app.route('/login')
-def login():
-   return render_template('login.html')
+@app.route('/regloginpage')
+def regloginpage():
+   msg = ''
+   for m in get_flashed_messages(with_categories=False, category_filter=['relogin']):
+      msg = msg + m
+   return render_template('login.html', msg = msg)
 
-@app.route('/reg')
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+   username = request.values.get('username').strip()
+   password = request.values.get('password').strip()
+
+   user = User.query.filter_by(username = username).first()
+   if username == '' or password == '':
+      return redirect_with_msg(url_for('regloginpage'), '用户名或密码为空！', 'relogin')
+
+   if user == None:
+      return redirect_with_msg(url_for('regloginpage'), '用户名不存在！', 'relogin')
+
+   m = hashlib.md5()
+   m.update(password.encode('utf-8') + user.salt.encode('utf-8'))
+   if (m.hexdigest() != user.password):
+      return redirect_with_msg(url_for('regloginpage'), '密码不正确', 'reglogin')
+
+   return redirect('/')
+
+
+
+
+@app.route('/reg', methods = ['GET', 'POST'])
 def reg():
    username = request.values.get('username').strip()
    password = request.values.get('password').strip()
 
    user = User.query.filter_by(username = username).first()
    if username == '' or password == '':
-      redirect_with_msg(url_for('login'), '用户名或密码为空！', 'login')
+      return redirect_with_msg(url_for('regloginpage'), '用户名或密码为空！', 'relogin')
 
    if user != None:
-      redirect_with_msg(url_for('login'), '用户名已存在👌', 'login')
+      return redirect_with_msg(url_for('regloginpage'), '用户名已存在👌', 'relogin')
 
    # 将新用户入表
+   salt = '.'.join(random.sample('0123456789abcdefgABCDEFG', 10))
+   m = hashlib.md5()
+   m.update(password.encode('utf-8') + salt.encode('utf-8'))
+   password = m.hexdigest()
+   user = User(username, password, salt)
+   db.session.add(user)
+   db.session.commit()
+
+   return redirect('/')
+   
 
    
 
