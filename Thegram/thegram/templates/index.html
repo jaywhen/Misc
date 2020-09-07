@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Gakiigram{% endblock %}
+{% block title %}Gakiigram-{{ current_user.username }}{% endblock %}
 {% block css %}{{ url_for('static', filename = 'styles/pages/index.css') }}{% endblock %}
 {% block content %}
 <div class="page-main clearfix">

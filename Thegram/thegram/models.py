@@ -1,7 +1,8 @@
-from thegram import db
+from thegram import db, login_manager
 
 from datetime import datetime
 import random
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     username = db.Column(db.String(20), unique = True)
@@ -18,6 +19,25 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %d %s>' %(self.id, self.username)
+
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.id
+
+    
+
+    
 
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
@@ -50,6 +70,10 @@ class Comment(db.Model):
     def __repr__(self):
         return '<Comment %d %s>' %(self.id, self.content)
 
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
 # 修改建表函数
 # 尝试faker
 # fake数据不要超过20个（user）

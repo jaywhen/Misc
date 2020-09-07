@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}登录{% endblock %}
+{% block title %}Login{% endblock %}
 {% block css %}{{ url_for('static', filename = 'styles/pages/login.css') }}{% endblock %}
 {% block content %}
 <main class="main login-main" role = "main">
@@ -32,7 +32,7 @@
                         <input class="input-txt" aria-label="邮箱" aria-required="true" autocapitalize="off" autocorrect="off" name="register e-mail" placeholder="邮箱" type="email" value="">
                     </div> -->
                     <!-- 注册&&登录按钮 -->
-                    <input type="hidden" name="next">
+                    <input type="hidden" name="next" value="{{ next }}">
                     <div class="btn-wrapper">
                         <button class="btn-primary" onclick="form=document.getElementById('regloginform');form.action='/login';">登录</button>
                         <button class="btn-primary" onclick="form=document.getElementById('regloginform');form.action='/reg';">注册</button>

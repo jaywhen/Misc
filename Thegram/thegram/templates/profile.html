@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}profile{% endblock %}
+{% block title %}Profile-{{ current_user.username }}{% endblock %}
 {% block css %}{{ url_for('static', filename = 'styles/pages/profile.css') }}{% endblock %}
 {% block content %}
 <div class="page-main clearfix">

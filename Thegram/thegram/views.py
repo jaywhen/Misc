@@ -2,6 +2,7 @@ from thegram import app
 
 from flask import render_template, url_for, redirect, request, flash, get_flashed_messages
 from thegram.models import User, Image, db
+from flask_login import login_user, logout_user, current_user, login_required
 import random, hashlib
 
 
@@ -26,6 +27,7 @@ def image(image_id):
    return render_template('pageDetail.html', image = image)
 
 @app.route('/profile/<int:user_id>')
+@login_required
 def profile(user_id):
    user = User.query.get(user_id)
    if user == None:
@@ -35,31 +37,9 @@ def profile(user_id):
 @app.route('/regloginpage')
 def regloginpage():
    msg = ''
-   for m in get_flashed_messages(with_categories=False, category_filter=['relogin']):
+   for m in get_flashed_messages(with_categories=False, category_filter=['reglogin']):
       msg = msg + m
-   return render_template('login.html', msg = msg)
-
-@app.route('/login', methods = ['GET', 'POST'])
-def login():
-   username = request.values.get('username').strip()
-   password = request.values.get('password').strip()
-
-   user = User.query.filter_by(username = username).first()
-   if username == '' or password == '':
-      return redirect_with_msg(url_for('regloginpage'), '用户名或密码为空！', 'relogin')
-
-   if user == None:
-      return redirect_with_msg(url_for('regloginpage'), '用户名不存在！', 'relogin')
-
-   m = hashlib.md5()
-   m.update(password.encode('utf-8') + user.salt.encode('utf-8'))
-   if (m.hexdigest() != user.password):
-      return redirect_with_msg(url_for('regloginpage'), '密码不正确', 'reglogin')
-
-   return redirect('/')
-
-
-
+   return render_template('login.html', msg = msg, next = request.values.get('next'))
 
 @app.route('/reg', methods = ['GET', 'POST'])
 def reg():
@@ -68,10 +48,10 @@ def reg():
 
    user = User.query.filter_by(username = username).first()
    if username == '' or password == '':
-      return redirect_with_msg(url_for('regloginpage'), '用户名或密码为空！', 'relogin')
+      return redirect_with_msg(url_for('regloginpage'), '用户名或密码为空！', 'reglogin')
 
    if user != None:
-      return redirect_with_msg(url_for('regloginpage'), '用户名已存在👌', 'relogin')
+      return redirect_with_msg(url_for('regloginpage'), '用户名已存在👌', 'reglogin')
 
    # 将新用户入表
    salt = '.'.join(random.sample('0123456789abcdefgABCDEFG', 10))
@@ -82,9 +62,45 @@ def reg():
    db.session.add(user)
    db.session.commit()
 
+   login_user(user)
+
+   next = request.values.get('next')
+   if next != None and next.starstwith('/'):
+      return redirect(next)
+
+   return redirect('/')
+
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+   username = request.values.get('username').strip()
+   password = request.values.get('password').strip()
+
+   
+   if username == '' or password == '':
+      return redirect_with_msg(url_for('regloginpage'), '用户名或密码为空！', 'reglogin')
+
+   user = User.query.filter_by(username = username).first()
+
+   if user == None:
+      return redirect_with_msg(url_for('regloginpage'), '用户名不存在！', 'reglogin')
+
+   m = hashlib.md5()
+   m.update(password.encode('utf-8') + user.salt.encode('utf-8'))
+   if (m.hexdigest() != user.password):
+      return redirect_with_msg(url_for('regloginpage'), '密码不正确！', 'reglogin')
+
+   login_user(user)
+
+   next = request.values.get('next')
+   if next != None and next.startswith('/'):
+      return redirect(next)
+
    return redirect('/')
    
-
+@app.route('/logout')
+def logout():
+   logout_user()
+   return redirect('/')
    
 
 
