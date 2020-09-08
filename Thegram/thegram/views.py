@@ -33,9 +33,9 @@ def profile(user_id):
    if user == None:
       return redirect('/')
    paginate = Image.query.filter_by(user_id = user_id).paginate(page=1, per_page=3, error_out=False)
-   return render_template('profile.html', user = user, images = paginate.items)
+   return render_template('profile.html', user = user, images = paginate.items, has_next = paginate.has_next)
 
-@app.route('/profile/images/<int:user_id>/<int:page>/<int:per_page>')
+@app.route('/profile/images/<int:user_id>/<int:page>/<int:per_page>/')
 def user_images(user_id, page, per_page):
    paginate = Image.query.filter_by(user_id = user_id).paginate(page=page, per_page=per_page, error_out=False)
    map = {'has_next': paginate.has_next}

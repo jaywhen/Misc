@@ -79,7 +79,7 @@ $(function () {
 
     function fRequestData(oConf) {
         var that = this;
-        var sUrl = '/profile/images/' + oConf.uid + '/' + oConf.page + '/' + oConf.pageSize + '/';
+        var sUrl = '/profile/images/' + oConf.uid + '/' + oConf.page + '/' + oConf.pageSize;
         $.ajax({url: sUrl, dataType: 'json'}).done(oConf.call).fail(oConf.error).always(oConf.always);
     }
 

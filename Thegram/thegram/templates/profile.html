@@ -34,17 +34,20 @@
                     </a>
                 {% endfor %}
             </div>
+            {% if has_next %}
             <div class="more-content js-load-more">
                 <a class="_oidfu" href="javascript:void(0);">more</a>
             </div>
+            {% endif %}
         </div>
     </article>
 </div>
 {% endblock %}
+
 {% block js %}
 <script type="text/javascript">
-    //window.uid = {{user.id}}; 
+    window.uid = {{user.id}}; 
 </script>
-<script type="text/javascript" src="/static/js/jquery.js"></script>
-<script type="text/javascript" src="/static/js/profile.js"></script>
-{% endblock%}
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/profile.js') }}"></script>
+{% endblock %}
