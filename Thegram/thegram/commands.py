@@ -18,21 +18,21 @@ def initdb(drop):
     db.create_all()
     click.echo('Initialized database')
     # add some user
-    for i in range(0, 100):
+    for i in range(0, 20):
         user = User(
             username = 'User' + str(i),
             password = 'a' + str(i)
         )
         db.session.add(user)
 
-        for j in range(0, 2):
+        for j in range(0, 6):
             image = Image(get_image_url(), i+1)
             db.session.add(image)
 
             for k in range(0, 3):
                 comment = Comment(
-                    content = '🧡💛💚💙💜🤎🖤' + str(k),
-                    image_id = 1 + 2*i + j,
+                    content = '🧡' + str(k),
+                    image_id = 1 + 6*i + j,
                     user_id = i + 1,
                 ) 
                 db.session.add(comment)

@@ -3,7 +3,7 @@ from thegram import app
 from flask import render_template, url_for, redirect, request, flash, get_flashed_messages
 from thegram.models import User, Image, db
 from flask_login import login_user, logout_user, current_user, login_required
-import random, hashlib
+import random, hashlib, json
 
 
 
@@ -32,7 +32,26 @@ def profile(user_id):
    user = User.query.get(user_id)
    if user == None:
       return redirect('/')
-   return render_template('profile.html', user = user)
+   paginate = Image.query.filter_by(user_id = user_id).paginate(page=1, per_page=3, error_out=False)
+   return render_template('profile.html', user = user, images = paginate.items)
+
+@app.route('/profile/images/<int:user_id>/<int:page>/<int:per_page>')
+def user_images(user_id, page, per_page):
+   paginate = Image.query.filter_by(user_id = user_id).paginate(page=page, per_page=per_page, error_out=False)
+   map = {'has_next': paginate.has_next}
+   images = []
+   for image in paginate.items:
+      imgvo = {
+         'id':image.id,
+         'url':image.url, 
+         'comment_count':len(image.comments)
+         }
+      images.append(imgvo)
+   map['images'] = images
+   return json.dumps(map)
+
+
+
 
 @app.route('/regloginpage')
 def regloginpage():
@@ -65,7 +84,7 @@ def reg():
    login_user(user)
 
    next = request.values.get('next')
-   if next != None and next.starstwith('/'):
+   if next != None and next.starstwith('/') > 0:
       return redirect(next)
 
    return redirect('/')
