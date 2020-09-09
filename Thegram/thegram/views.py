@@ -1,5 +1,4 @@
 from thegram import app
-
 from flask import render_template, url_for, redirect, request, flash, get_flashed_messages
 from thegram.models import User, Image, db
 from flask_login import login_user, logout_user, current_user, login_required
@@ -121,6 +120,17 @@ def logout():
    logout_user()
    return redirect('/')
    
+@app.route('/upload')
+def upload():
+   file = request.files['file']
+   file_ext = ''
+   if file.filename.find('.') > 0:
+      file_ext = file.filename.rsplit('.', 1)[1].strip().lower()
+   if file_ext in app.config['ALLOWED_EXT']:
+      file_name = str(uuid)
+   
+   return redirect('/profile/%d' % current_user.id)
+
 
 
 @app.route('/legal/terms')
