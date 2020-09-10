@@ -2,15 +2,18 @@ from thegram import app
 from flask import render_template, url_for, redirect, request, flash, get_flashed_messages
 from thegram.models import User, Image, db
 from flask_login import login_user, logout_user, current_user, login_required
-import random, hashlib, json
+import random, hashlib, json, uuid, os
 
 
+def save_to_local(file, file_name):
+   save_dir = app.config['UPLOAD_DIR']
+   file.save(os.path.join(save_dir, file_name))
+   return '/image/' + file_name
 
 def redirect_with_msg(target, msg, category):
    if msg != None:
       flash(msg, category = category)
    return redirect(target)
-
 
 @app.route('/')
 def index():
@@ -48,9 +51,6 @@ def user_images(user_id, page, per_page):
       images.append(imgvo)
    map['images'] = images
    return json.dumps(map)
-
-
-
 
 @app.route('/regloginpage')
 def regloginpage():
@@ -120,14 +120,19 @@ def logout():
    logout_user()
    return redirect('/')
    
-@app.route('/upload')
+@app.route('/upload', methods = ['POST'])
 def upload():
-   file = request.files['file']
+   file = request.files["file"]
    file_ext = ''
    if file.filename.find('.') > 0:
       file_ext = file.filename.rsplit('.', 1)[1].strip().lower()
    if file_ext in app.config['ALLOWED_EXT']:
-      file_name = str(uuid)
+      file_name = str(uuid.uuid1()).replace('-', '') + '.' + file_ext
+      url = save_to_local(file, file_name)
+      if url != None:
+         upload_img = Image(url, current_user.id)
+         db.session.add(upload_img)
+         db.session.commit()
    
    return redirect('/profile/%d' % current_user.id)
 
