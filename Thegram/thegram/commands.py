@@ -1,10 +1,15 @@
+"""
+自定义一些应用相关的命令
+"""
 import click
 from thegram import app, db
 from thegram.models import User, Image, Comment
 
+from faker import Faker
 import random
 
 def get_image_url():
+    """ made random url for users """
     return 'http://images.nowcoder.com/head/' + str(random.randint(0,1000)) + 'm.png'
 
 @app.cli.command()
@@ -18,21 +23,22 @@ def initdb(drop):
     db.create_all()
     click.echo('Initialized database')
     # add some user
+    fake = Faker(['zh_CN', 'en_US', 'ja_JP'])
     for i in range(0, 20):
         user = User(
-            username = 'User' + str(i),
+            username = fake.name(),
             password = 'a' + str(i)
         )
         db.session.add(user)
 
-        for j in range(0, 6):
-            image = Image(get_image_url(), i+1)
+        for j in range(0, 2):
+            image = Image(get_image_url(), i+1) # id从1开始
             db.session.add(image)
 
             for k in range(0, 3):
                 comment = Comment(
-                    content = '🧡' + str(k),
-                    image_id = 1 + 6*i + j,
+                    content = fake.text(),
+                    image_id = 1 + 2*i + j,
                     user_id = i + 1,
                 ) 
                 db.session.add(comment)

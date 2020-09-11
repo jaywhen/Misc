@@ -11,6 +11,7 @@ flask-script = "*"
 flask-sqlalchemy = "*"
 python-dotenv = "*"
 flask-login = "*"
+faker = "*"
 
 [requires]
 python_version = "3.8"
