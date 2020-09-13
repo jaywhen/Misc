@@ -1,14 +1,25 @@
 from thegram import app
-from flask import render_template, url_for, redirect, request, flash, get_flashed_messages
-from thegram.models import User, Image, db
+from flask import render_template, url_for, redirect, request, flash, get_flashed_messages, send_from_directory
+from thegram.models import User, Image, db, Comment
 from flask_login import login_user, logout_user, current_user, login_required
+from qiniusdk import qiniu_upload_file
 import random, hashlib, json, uuid, os
 
 
+# 将用户上传的图片直接保存到服务器
 def save_to_local(file, file_name):
    save_dir = app.config['UPLOAD_DIR']
    file.save(os.path.join(save_dir, file_name))
    return '/image/' + file_name
+
+# 将用户上传的图片保存到七牛云
+def save_to_qiniu(file, filename):
+   return qiniu_upload_file(file, filename)
+
+
+@app.route('/image/<image_name>')
+def view_image(image_name):
+   return send_from_directory(app.config['UPLOAD_DIR'], image_name)
 
 def redirect_with_msg(target, msg, category):
    if msg != None:
@@ -83,7 +94,7 @@ def reg():
    login_user(user)
 
    next = request.values.get('next')
-   if next != None and next.starstwith('/') > 0:
+   if next != None and next.startswith('/') > 0:
       return redirect(next)
 
    return redirect('/')
@@ -128,7 +139,8 @@ def upload():
       file_ext = file.filename.rsplit('.', 1)[1].strip().lower()
    if file_ext in app.config['ALLOWED_EXT']:
       file_name = str(uuid.uuid1()).replace('-', '') + '.' + file_ext
-      url = save_to_local(file, file_name)
+      # url = save_to_local(file, file_name)
+      url = save_to_qiniu(file, file_name)
       if url != None:
          upload_img = Image(url, current_user.id)
          db.session.add(upload_img)
@@ -136,7 +148,26 @@ def upload():
    
    return redirect('/profile/%d' % current_user.id)
 
+@app.route('/addcomment/', methods = ['POST'])
+@login_required
+def add_comment():
+   image_id = int(request.values['image_id'])
+   content = request.values['content']
+   comment = Comment(content, image_id, current_user.id)
+   
+   
+   db.session.add(comment)
+   db.session.commit()
 
+   return json.dumps({
+      "code":0,
+      "id":comment.id,
+      "content":comment.content,
+      "username":comment.user.username,
+      "user_id":comment.user_id
+   })
+
+   
 
 @app.route('/legal/terms')
 def legal_terms():

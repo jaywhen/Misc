@@ -23,22 +23,14 @@
         </div>
         <div class="mod-ft">
             <ul class="discuss-list">
-                <li>
-                    <h1>
-                        <a>jaywhen</a>
-                        <span>
-                            <span>要开学了，🐟还没摸完...</span>
-                        </span>
-                    </h1>
-                </li>
                 <li class="more-discuss">
                     <a>
-                        <span>全部</span><span class="">2</span>
+                        <span>全部</span><span class="">{{ image.comments|length }}</span>
                         <span>条评论</span>
                     </a>
                 </li>
                 {% for comment in image.comments %}
-                {% if loop.index > 1 %} {% break %} {% endif %}
+                {% if loop.index > 2 %} {% break %} {% endif %}
                 <li>
                     <a title="{{ comment.user.username }}" href="profile/{{ comment.user.id }}">{{ comment.user.username }}</a>
                     <span>
@@ -46,12 +38,6 @@
                     </span>
                 </li>
                 {% endfor %}
-                <!-- <li>
-                    <a title="#" href="">新垣結衣</a>
-                    <span>
-                        <span>すごいですね！！！</span>
-                    </span>
-                </li> -->
             </ul>
             <section class="discuss-edit">
                 <a class="icon-heart"></a>

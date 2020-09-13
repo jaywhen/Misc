@@ -35,7 +35,8 @@ def initdb(drop):
             image = Image(get_image_url(), i+1) # id从1开始
             db.session.add(image)
 
-            for k in range(0, 3):
+            # 一张图三条评论
+            for k in range(0, 3): 
                 comment = Comment(
                     content = fake.text(),
                     image_id = 1 + 2*i + j,
@@ -44,7 +45,7 @@ def initdb(drop):
                 db.session.add(comment)
 
     db.session.commit()
-    click.echo('now added some users')
+    click.echo('🆗---now added some users')
 
 @app.cli.command()
 def tqur():
