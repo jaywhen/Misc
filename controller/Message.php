@@ -4,7 +4,6 @@ namespace app\controller;
 
 use think\facade\Db;
 
-
 /*
  * 发布新树洞消息
  */

@@ -79,17 +79,16 @@ class UserSign {
             $result = Db::table('user')->insert($data);
             if ($result) {
                 $return_data = array();
-                $result_data['error_code'] = 0;
-                $return_data['msg'] = '注册成功';
+                $return_data['error_code'] = 0;
+                $return_data['msg'] = '注册成功!!';
                 $return_data['data']['user_id'] = Db::table('user')->where('phone_num', $_POST['phone_num'])->value('id');
                 $return_data['data']['username'] = $_POST['username'];
-                //$return_data['data']['password'] = $_POST['password'];
                 $return_data['data']['phone_num'] = $_POST['phone_num'];
-                $return_data['data']['head_url'] = $_POST['head_url'];
+                $return_data['data']['head_url'] = $data['head_url'];
                 return json($return_data);
             } else {
                 $return_data = array();
-                $return_data['error_data'] = 4;
+                $return_data['error_code'] = 4;
                 $return_data['msg'] = '注册失败';
                 return json($return_data);
             }
