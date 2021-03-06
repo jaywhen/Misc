@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Time</title>
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: rgb(51, 50, 50);
+                width: auto;
+                height: 100vh;
+            }
+            #time {
+                color: ivory;
+                font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+                font-size: 150px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="time"></div>
+        <script>
+            function showTime () {
+                let date = new Date().toLocaleTimeString();
+                document.getElementById("time").innerText = date;
+            }
+            setInterval(showTime, 1000);
+        </script>
+    </body>
+    
+</html>
